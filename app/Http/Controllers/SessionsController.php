@@ -12,27 +12,27 @@ class SessionsController extends Controller
             'only' => ['create']
         ]);
     }
-    
-    public function create()
+
+     public function create()
     {
         return view('sessions.create');
     }
 
     public function store(Request $request)
     {
-        $credentials= $this->validate($request,[
-            'email'=> 'required|email|max:255',
-            'password'=>'required'
-        ]);
+       $credentials = $this->validate($request, [
+           'email' => 'required|email|max:255',
+           'password' => 'required'
+       ]);
 
-        if(Auth::attempt($credentials, $request->has('remember'))){
-            session()->flash('success','歡迎回來～！');
-            return redirect()->route('users.show',[Auth::user()]);
-        }else{
-            session()->flash('danger','很抱欺，您的資料不匹配');
-            return redirect()->back()->withInput();
-        }
-        
+       if (Auth::attempt($credentials, $request->has('remember'))) {
+           session()->flash('success', '欢迎回来！');
+           $fallback = route('users.show', Auth::user());
+           return redirect()->intended($fallback);
+       } else {
+           session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
+           return redirect()->back()->withInput();
+       }
     }
     public function destroy(){
         Auth::logout();

@@ -8,10 +8,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class UserPolicy
 {
     use HandlesAuthorization;
-    public function update(User $currentUser, User $user)
-    {
-        return $currentUser->id === $user->id;
-    }
+
     /**
      * Create a new policy instance.
      *
@@ -20,5 +17,9 @@ class UserPolicy
     public function __construct()
     {
         //
+    }
+    public function update(User $currentUser, User $user)
+    {
+        return $currentUser->id === $user->id;
     }
 }
